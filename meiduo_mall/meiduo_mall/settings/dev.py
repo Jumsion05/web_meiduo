@@ -91,8 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': '127.0.0.1',
         'PORT': 3306,
-        'USER': 'mysql',
-        'PASSWORD': 'mysql',
+        'USER': 'meiduo_web',
+        'PASSWORD': 'meiduo_web',
         'NAME': 'meiduo_web'
     }
 }
@@ -152,7 +152,7 @@ CACHES = {
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
-    }
+    },
 }
 
 # 保存 session数据到 Redis中
@@ -217,3 +217,6 @@ CORS_ORIGIN_WHITELIST = (
 )
 # 指定在跨域访问中，后台是否支持cookie操作
 CORS_ALLOW_CREDENTIALS = True
+
+# 指定使用自定义的用户模型类
+AUTH_USER_MODEL = 'users.User'
