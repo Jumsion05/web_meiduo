@@ -15,6 +15,8 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import datetime
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 import sys
@@ -29,7 +31,8 @@ SECRET_KEY = '_#!7g1x7^+mhv6g)s)3#9!ts2qye(2dj)6-qt(p1y_r+zndt8k'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# 指定可以通过哪些主机访问服务器
+ALLOWED_HOSTS = ['127.0.0.1','localhost','api.meiduo.site']
 
 
 # Application definition
@@ -46,14 +49,16 @@ INSTALLED_APPS = [
     'corsheaders',  # 解决跨域问题
 
     # 'meiduo_mall.apps.users',
-    'users'
+    'users',
+    'verifications',  # 短信验证码
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -153,6 +158,14 @@ CACHES = {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
+    # 保存短信验证码
+    "sms_codes": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
 }
 
 # 保存 session数据到 Redis中
@@ -203,9 +216,21 @@ LOGGING = {
 }
 
 # DRF相关配置
-# REST_FRAMEWORK = {
-#     'EXCEPTION_HANDLER': 'meiduo_mall.utils.exceptions.custom_exception_handler',
-# }
+REST_FRAMEWORK = {
+
+    # 'EXCEPTION_HANDLER': 'meiduo_mall.utils.exceptions.custom_exception_handler',
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',  # jwt认证
+        'rest_framework.authentication.SessionAuthentication',  # 管理后台使用
+        'rest_framework.authentication.BasicAuthentication', # 用户认证
+    ),
+}
+
+JWT_AUTH = {  # 导包： import datetime
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # jwt有效时间
+}
+
 
 # 添加白名单
 # 指定可以跨域访问当前服务器的白名单
@@ -220,3 +245,4 @@ CORS_ALLOW_CREDENTIALS = True
 
 # 指定使用自定义的用户模型类
 AUTH_USER_MODEL = 'users.User'
+
