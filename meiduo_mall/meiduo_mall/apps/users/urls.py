@@ -10,5 +10,11 @@ urlpatterns = [
     url(r'^users/$',views.UserView.as_view()),
     # 登录接口  obtain_jwt_token 第三方包  登录视图
     url(r'^authorizations/$',obtain_jwt_token),
+    # 用户详情页接口
+    url(r'^user/$',views.UserDetailView.as_view()),
+    # 设置邮箱接口
+    url(r'^email/$',views.EmailView.as_view()),
+    # 邮箱激活接口
+    url(r'^email/verification/$',views.VerifyEmailView.as_view()),
 
 ]
