@@ -17,11 +17,12 @@
         <div class="header">
             <div class="welcome fl">欢迎来到美多商城!</div>
             <div class="fr">
-                <div class="login_info fl">
-                    欢迎您：<em>张 山</em>
-                    <a href="javascript:;" class="quit">退出</a>
+                <div v-if="username" class="login_btn fl">
+                    欢迎您：<em>[[ username ]]</em>
+                    <span>|</span>
+                    <a @click="logout">退出</a>
                 </div>
-                <div class="login_btn fl">
+                <div v-else class="login_btn fl">
                     <a href="login.html">登录</a>
                     <span>|</span>
                     <a href="register.html">注册</a>

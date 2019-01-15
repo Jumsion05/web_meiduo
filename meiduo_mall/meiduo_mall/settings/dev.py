@@ -45,12 +45,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # 第三方包
     'rest_framework',  # 注册DRF框架
     'corsheaders',  # 解决跨域问题
 
     # 'meiduo_mall.apps.users',
     'users',
     'verifications',  # 短信验证码
+    'oauth',    # 登录模块
 
 ]
 
@@ -229,6 +231,10 @@ REST_FRAMEWORK = {
 
 JWT_AUTH = {  # 导包： import datetime
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),  # jwt有效时间
+
+    # 修改登录成功接口返回的响应参数， 新增 user_id 和 username两个字段
+    'JWT_RESPONSE_PAYLOAD_HANDLER': 'users.utils.jwt_response_payload_handler',
+
 }
 
 
@@ -246,3 +252,13 @@ CORS_ALLOW_CREDENTIALS = True
 # 指定使用自定义的用户模型类
 AUTH_USER_MODEL = 'users.User'
 
+# 扩展登录接口: 使用自定义的认证后台, 使之支持可以使用用户名或手机号登录
+AUTHENTICATION_BACKENDS = [
+    'users.utils.UsernameMobileAuthorbackend',
+]
+
+# qq登录的参数
+# 已经审核通过的应用参数， 配置到setting文件中
+QQ_CLIENT_ID = '101474184'									# APP ID
+QQ_CLIENT_SECRET = 'c6ce949e04e12ecc909ae6a8b09b637c'		# APP Key
+QQ_REDIRECT_URI = 'http://www.meiduo.site:8080/oauth_callback.html' # 登录成功的回调地址

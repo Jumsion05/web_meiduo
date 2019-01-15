@@ -23,4 +23,6 @@ urlpatterns = [
     # 用户注册路由
     url(r'^', include("verifications.urls")),
     url(r'^', include("users.urls")),
+    # QQ登录路由
+    url(r'^oauth/', include("oauth.urls")),
 ]
